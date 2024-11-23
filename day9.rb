@@ -72,26 +72,14 @@ res = input.map do |target|
   end
 
   mid = target / 2
-  min = mid - 51
-  max = mid + 51
+  odd = 0
+  odd = 1 if target.odd?
 
-  best = (min..mid).map do |i|
-    other = target - i
-    [i, other, costs[i] + costs[other], other - i]
-    costs[i] + costs[other]
+  options = 0.upto(50-odd).map do |i|
+    costs[mid - i] + costs[mid + odd + i]
   end
 
-  #puts costs[min..max].inspect
-
-  #puts best.min
-  #best.min_by { [_1[1], _1.last] }.map { _1[1]}
-  best.min
-
-  #max = (target / 2) + 100
-  #puts costs[176245]
-  #puts costs[176241]
-  #puts [:minmax, min, max].inspect
-  #puts costs[min..max].tally.inspect
+  options.min
 end
 
 puts res.sum
