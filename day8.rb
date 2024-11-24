@@ -1,5 +1,5 @@
 input = 13
-input = 4098489
+input = 4_098_489
 
 total_blocks = 1
 last_layer = 1
@@ -17,7 +17,7 @@ available_blocks = 50
 priests = 3
 acolytes = 5
 
-available_blocks = 20240000
+available_blocks = 20_240_000
 priests = 452
 acolytes = 1111
 
@@ -44,12 +44,12 @@ extra_blocks = total_blocks - available_blocks
 
 puts "Part 2:", extra_blocks * stacks.length
 
-available_blocks = 125820926
+available_blocks = 125_820_926
 priests = 2
 acolytes = 5
 
-available_blocks = 202400000
-priests = 931743
+available_blocks = 202_400_000
+priests = 931_743
 acolytes = 10
 
 stacks = [1]
@@ -71,7 +71,7 @@ loop do
   end
 
   last_thickness = thickness
-  
+
   total_blocks = stacks.first + stacks.last
 
   1.upto(stacks.length - 2).each do |i|
@@ -81,8 +81,6 @@ loop do
   end
 
   break if total_blocks > available_blocks
-
 end
 
 puts "Part 3:", total_blocks - available_blocks
-

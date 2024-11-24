@@ -89,12 +89,7 @@ until queue.empty?
   path, depth = queue.shift
   node = path.last
 
-  if !depths.key?(depth) && depths.key?(depth - 1) && depths[depth - 1].length == 1
-    break
-  end
-
-  if depths[depth - 1]
-  end
+  break if !depths.key?(depth) && depths.key?(depth - 1) && depths[depth - 1].length == 1
 
   next unless graph.key?(node)
 

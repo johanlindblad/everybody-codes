@@ -16,6 +16,7 @@ word = []
 (0...input.length).each do |y|
   (0...input.first.length).each do |x|
     next unless input[y][x] == "."
+
     row_letters = input[y].sort.uniq - ["."]
     col_letters = transposed[x].sort.uniq - ["."]
 
@@ -38,26 +39,27 @@ input = File.read("./everybody_codes_e2024_q10_p2.txt")
 
 rows = input.split("\n\n")
 
-maps = rows.flat_map do |row|
+samples = rows.flat_map do |row|
   row.split("\n").map { |line| line.split(" ") }.transpose
 end
 
-scores = maps.map do |input|
-  input = input.map(&:chars)
-  transposed = input.transpose
+scores = samples.map do |sample|
+  sample = sample.map(&:chars)
+  transposed = sample.transpose
   word = []
 
-  (0...input.length).each do |y|
-    (0...input.first.length).each do |x|
-      next unless input[y][x] == "."
-      row_letters = input[y].sort.uniq - ["."]
+  (0...sample.length).each do |y|
+    (0...sample.first.length).each do |x|
+      next unless sample[y][x] == "."
+
+      row_letters = sample[y].sort.uniq - ["."]
       col_letters = transposed[x].sort.uniq - ["."]
 
       word.push((row_letters & col_letters).first)
     end
   end
 
-  bases = ("A".."Z").map.with_index { |l, i| [l, i + 1]}.to_h
+  bases = ("A".."Z").map.with_index { |l, i| [l, i + 1] }.to_h
   score = word.map.with_index { |l, i| bases[l] * (i + 1) }
 
   score.sum
@@ -85,12 +87,13 @@ input = input.split("\n").map(&:chars)
 total_score = 0
 
 word_scores = {}
+OFFSETS = [0, 1, 6, 7].freeze
 
 loop do
   startx = 0
   starty = 0
   total_score = word_scores.values.sum
-  loop do 
+  loop do
     startx = 0
     loop do
       unhandled = []
@@ -115,13 +118,13 @@ loop do
       end
 
       row_options = lambda do |dy|
-        [0, 1, 6, 7].map  do |dx|
+        OFFSETS.map do |dx|
           input[starty + 2 + dy][startx + dx]
         end - ["?"]
       end
 
       col_options = lambda do |dx|
-        [0, 1, 6, 7].map  do |dy|
+        OFFSETS.map do |dy|
           input[starty + dy][startx + 2 + dx]
         end - ["?"]
       end
@@ -139,16 +142,9 @@ loop do
       end
 
       fill_blank = lambda do |y, x, val|
-        [0, 1, 6, 7].each do |dx|
-          if input[y][startx + dx] == "?"
-            input[y][startx + dx] = val
-          end
-        end
-
-        [0, 1, 6, 7].each do |dy|
-          if input[starty + dy][x] == "?"
-            input[starty + dy][x] = val
-          end
+        OFFSETS.each do |offset|
+          input[y][startx + offset] = val if input[y][startx + offset] == "?"
+          input[starty + offset][x] = val if input[starty + offset][x] == "?"
         end
       end
 
@@ -163,11 +159,11 @@ loop do
 
         options = (unused_row + unused_col).uniq
 
-        if options.length == 1
-          option = options.first
-          input[y][x] = option
-          fill_blank.(y, x, option)
-        end
+        next unless options.length == 1
+
+        option = options.first
+        input[y][x] = option
+        fill_blank.call(y, x, option)
       end
 
       word = 0.upto(3).map do |y|
@@ -177,7 +173,7 @@ loop do
       incomplete = word.length < 16
 
       unless incomplete
-        bases = ("A".."Z").map.with_index { |l, i| [l, i + 1]}.to_h
+        bases = ("A".."Z").map.with_index { |l, i| [l, i + 1] }.to_h
         score = word.map.with_index { |l, i| bases[l] * (i + 1) }
 
         word_scores[[starty, startx]] = score.sum unless incomplete
@@ -194,5 +190,4 @@ loop do
   break if word_scores.values.sum == total_score
 end
 
-# puts input.map(&:join)
 puts "Part 3:", total_score

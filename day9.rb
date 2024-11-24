@@ -14,6 +14,7 @@ costs = input.map do |n|
 
   stamps.reverse.each do |stamp|
     next if stamp > n
+
     used = n / stamp
     cost += used
     n -= (used * stamp)
@@ -42,9 +43,7 @@ costs[0] = 0
 
 stamps.each do |stamp|
   0.upto(max).each do |start|
-    if costs[start + stamp] > (costs[start] + 1)
-      costs[start + stamp] = costs[start] + 1
-    end
+    costs[start + stamp] = costs[start] + 1 if costs[start + stamp] > (costs[start] + 1)
   end
 end
 
@@ -65,9 +64,7 @@ res = input.map do |target|
   costs[0] = 0
   stamps.each do |stamp|
     0.upto(costs.length - 1 - stamp).each do |start|
-      if costs[start + stamp] > (costs[start] + 1)
-        costs[start + stamp] = costs[start] + 1
-      end
+      costs[start + stamp] = costs[start] + 1 if costs[start + stamp] > (costs[start] + 1)
     end
   end
 
@@ -75,7 +72,7 @@ res = input.map do |target|
   odd = 0
   odd = 1 if target.odd?
 
-  options = 0.upto(50-odd).map do |i|
+  options = 0.upto(50 - odd).map do |i|
     costs[mid - i] + costs[mid + odd + i]
   end
 
