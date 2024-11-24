@@ -1,0 +1,78 @@
+# First phase
+
+Shot:
+
+y = sy + t
+x = sx + t
+
+Target:
+
+y = ty - t
+x = tx - t
+
+Hit:
+
+sy + t = ty - t => sy + 2t = ty => 2t = ty - sy => t = (ty - sy) / 2
+
+# Second phase
+
+Segment:
+
+y = sy + p
+x = sx + t - wt
+
+from t=p to t=2p
+
+Target:
+
+y = ty - t
+x = tx - t
+
+sy + p = ty - t => 
+	p = ty - t - sy
+	t = ty - sy - p
+
+sx + t - wt = tx - t => sx + 2t - wt = tx =>
+	t = (tx - sx + wt) / 2
+	
+	sx + 2t = tx + wt =>
+	wt = sx + 2t - tx
+
+t = (tx - sx + wt) / 2 = ty - sy - p =>
+	(tx - sx + wt) = 2(ty - sy - p)
+	[wt = sx + 2t - tx] =>
+	t = ty - sy - p =>
+	wt = sx + 2(ty - sy - p) - tx
+
+
+max_power = (ty - sy) / 2
+
+# Third phase
+
+Segment:
+
+y = sy + (3 * p) - (t - wt) = sy + (3 * p) - t + wt
+x = sx + t - wt
+
+Target:
+
+y = ty - t
+x = tx - t
+
+sy + (3 * p) - t + wt = ty - t =>
+	sy + (3 * p) + wt = ty =>
+	
+	wt = ty - sy - 3p
+	p = (ty - wt + sy) / 3
+
+
+tx - t = sx + t - wt =>
+	tx = sx + 2t - wt
+	2t = tx - sx + wt
+	t = (tx - sx + wt) / 2
+
+t >= 2p (downphase starts there)
+
+(tx - sx) > 2p
+(tx - sx) / 2 > p
+max_power = (tx - sx) / 2

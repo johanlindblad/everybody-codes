@@ -34,18 +34,18 @@ def compress_graph(graph, input)
 
     graph.each do |node, neigh|
       y, x = node
-      if neigh.length == 2 && input[y][x] == "."
-        c1, c2 = neigh.keys
-        d1 = neigh[c1]
-        d2 = neigh[c2]
+      next unless neigh.length == 2 && input[y][x] == "."
 
-        graph[c1][c2] = d1 + d2
-        graph[c2][c1] = d1 + d2
-        graph[c1].delete(node)
-        graph[c2].delete(node)
-        graph.delete(node)
-        mod = true
-      end
+      c1, c2 = neigh.keys
+      d1 = neigh[c1]
+      d2 = neigh[c2]
+
+      graph[c1][c2] = d1 + d2
+      graph[c2][c1] = d1 + d2
+      graph[c1].delete(node)
+      graph[c2].delete(node)
+      graph.delete(node)
+      mod = true
     end
 
     break unless mod
@@ -64,17 +64,13 @@ def shortest_path(input, start)
   until queue.empty?
     yx, dist, collected = queue.shift
 
-    if yx == start && dist > 0
-      return dist
-    end
+    return dist if yx == start && dist > 0
 
     graph[yx].each do |n, d|
       c = collected
       ny, nx = n
 
-      if all_letters.include?(input[ny][nx])
-        c = c + [input[ny][nx]]
-      end
+      c += [input[ny][nx]] if all_letters.include?(input[ny][nx])
 
       next if visited.key?([n, c])
       next if n == start && c != all_letters
@@ -109,4 +105,3 @@ c = shortest_path(parts[1], [0, startx])
 extra = 2 * 2 * 3
 
 puts a + b + c + extra
-

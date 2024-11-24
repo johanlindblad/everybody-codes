@@ -61,6 +61,7 @@ PLATFORMS
 
 DEPENDENCIES
   pqueue (~> 2.1)
+  rubocop
   ruby-lsp
   standardrb
 
