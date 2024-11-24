@@ -15,6 +15,8 @@ entry = input.first.index(".")
 queue = [[[0, entry], 0]]
 visited = Set.new
 
+NEIGHBORS = [[0, 1], [0, -1], [1, 0], [-1, 0]].freeze
+
 until queue.empty?
   coord, dist = queue.shift
   y, x = coord
@@ -25,7 +27,7 @@ until queue.empty?
     break
   end
 
-  neigh = [[0, 1], [0, -1], [1, 0], [-1, 0]].map do |d|
+  neigh = NEIGHBORS.map do |d|
     dy, dx = d
     [y + dy, x + dx]
   end.reject do |d|
@@ -53,8 +55,6 @@ input = "##########.##########
 #...#....BBB..#....##
 #C............#....C#
 #####################"
-
-require 'pqueue'
 
 input = File.read("./everybody_codes_e2024_q15_p2.txt")
 
@@ -86,7 +86,7 @@ until queue.empty?
     break
   end
 
-  neigh = [[0, 1], [0, -1], [1, 0], [-1, 0]].map do |d|
+  neigh = NEIGHBORS.map do |d|
     dy, dx = d
     [y + dy, x + dx]
   end.reject do |d|

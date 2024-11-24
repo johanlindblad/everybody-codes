@@ -13,18 +13,18 @@ totals = input.map do |plan|
 
   power = steps.cycle.take(10).inject([10]) do |prev, step|
     new = case step
-    when "+"
-      prev.last + 1
-    when "-"
-      prev.last - 1
-    when "="
-      prev.last
-    end
+          when "+"
+            prev.last + 1
+          when "-"
+            prev.last - 1
+          when "="
+            prev.last
+          end
 
     prev + [new]
   end
 
-  [letter, power[1..].sum]
+  [letter, power.drop(1).sum]
 end
 
 puts "Part 1:", totals.sort_by(&:last).reverse.map(&:first).join("")
@@ -71,22 +71,22 @@ totals = input.map do |plan|
     step, track_step = pair
 
     new = case [step, track_step]
-    in [_, "+"]
-      prev.last + 1
-    in [_, "-"]
-      prev.last - 1
-    in ["+", _]
-      prev.last + 1
-    in ["-", _]
-      prev.last - 1
-    in _
-      prev.last
-    end
+          in [_, "+"]
+            prev.last + 1
+          in [_, "-"]
+            prev.last - 1
+          in ["+", _]
+            prev.last + 1
+          in ["-", _]
+            prev.last - 1
+          in _
+            prev.last
+          end
 
     prev + [new]
   end
 
-  [letter, power[1..].sum]
+  [letter, power.drop(1).sum]
 end
 
 puts totals.inspect
@@ -113,7 +113,8 @@ steps = input.first.split(":").last.split(",")
 
 track_a = []
 visited = Set.new
-x, y = [1, 0]
+x = 1
+y = 0
 
 loop do
   track_a.push(track[y][x])
@@ -121,11 +122,11 @@ loop do
   track[y][x] = "#"
 
   neigh = [[x + 1, y], [x, y + 1], [x - 1, y], [x, y - 1]]
-    .reject { |pair| pair.first < 0 || pair.last < 0 }
-    .reject { |pair| pair.first >= track.first.length || pair.last >= track.length }
-    .reject { |pair| track[pair.last][pair.first] == " " }
-    .reject { |pair| track[pair.last][pair.first].nil? }
-    .reject { |pair| visited.include?(pair) }
+          .reject { |pair| pair.first < 0 || pair.last < 0 }
+          .reject { |pair| pair.first >= track.first.length || pair.last >= track.length }
+          .reject { |pair| track[pair.last][pair.first] == " " }
+          .reject { |pair| track[pair.last][pair.first].nil? }
+          .reject { |pair| visited.include?(pair) }
 
   neigh = neigh.first
 
@@ -144,22 +145,22 @@ power = steps.cycle.take(len).zip(track_a.cycle.take(len)).inject([10]) do |prev
   step, track_step = pair
 
   new = case [step, track_step]
-  in [_, "+"]
-    prev.last + 1
-  in [_, "-"]
-    prev.last - 1
-  in ["+", _]
-    prev.last + 1
-  in ["-", _]
-    prev.last - 1
-  in _
-    prev.last
-  end
+        in [_, "+"]
+          prev.last + 1
+        in [_, "-"]
+          prev.last - 1
+        in ["+", _]
+          prev.last + 1
+        in ["-", _]
+          prev.last - 1
+        in _
+          prev.last
+        end
 
   prev + [new]
 end
 
-competitor = power[1..].sum
+competitor = power.drop(1).sum
 puts "Competitor:", competitor
 
 i = 0
@@ -191,22 +192,22 @@ num = permutations.count do |steps|
   power = steps.cycle.take(len).zip(track_a.cycle.take(len)).inject([10]) do |prev, pair|
     step, track_step = pair
     new = case [step, track_step]
-    in [_, "+"]
-      prev.last + 1
-    in [_, "-"]
-      prev.last - 1
-    in ["+", _]
-      prev.last + 1
-    in ["-", _]
-      prev.last - 1
-    in _
-      prev.last
-    end
+          in [_, "+"]
+            prev.last + 1
+          in [_, "-"]
+            prev.last - 1
+          in ["+", _]
+            prev.last + 1
+          in ["-", _]
+            prev.last - 1
+          in _
+            prev.last
+          end
 
     prev + [new]
   end
 
-  power[1..].sum > competitor
+  power.drop(1).sum > competitor
 end
 
 puts "Part 3:", num.inspect

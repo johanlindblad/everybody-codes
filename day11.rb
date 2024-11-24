@@ -50,7 +50,6 @@ puts "Part 2:", pop.length
 
 input = File.read("./everybody_codes_e2024_q11_p3.txt")
 
-
 input = input.split("\n").map { |line| line.split(":") }
 
 graph = {}
@@ -67,7 +66,6 @@ res = graph.keys.map do |start|
 
   1.upto(20).each do |n|
     new_pop = {}
-    #puts pop.inspect
     pop.each do |key, num|
       result = graph[key]
       result.each do |r|

@@ -1,16 +1,16 @@
 input = "U5,R3,D2,L5,U4,R5,D2"
 input = File.read("./everybody_codes_e2024_q14_p1.txt")
 
-input = input.split(",")
+input = input.split(",").map(&:chars)
 
-space = {}
-
-x, y, z = [0, 0, 0]
+x = 0
+y = 0
+z = 0
 maxz = 0
 
 input.each do |step|
   dir = step[0]
-  num = step[1..].to_i
+  num = step.drop(1).join.to_i
 
   case dir
   when "U"
@@ -41,13 +41,17 @@ input = input.split("\n")
 segments = Set.new
 
 input.each do |plant|
-  x, y, z = [0, 0, 0]
+  x = 0
+  y = 0
+  z = 0
 
-  plant.split(",").each do |step|
+  plant.split(",").map(&:chars).each do |step|
     dir = step[0]
-    num = step[1..].to_i
+    num = step.drop(1).join.to_i
 
-    ox, oy, oz = x, y, z
+    ox = x
+    oy = y
+    oz = z
 
     case dir
     when "U"
@@ -80,7 +84,6 @@ U30,L2,F1,R1,B1,R1,F2,U1,F1
 U25,R1,L2,B1,U1,R2,F1,L2
 U16,L1,B1,L1,B3,L1,B1,F1"
 
-
 input = File.read("./everybody_codes_e2024_q14_p3.txt")
 input = input.split("\n")
 
@@ -89,13 +92,17 @@ segments = Set.new
 leaves = Set.new
 
 input.each do |plant|
-  x, y, z = [0, 0, 0]
+  x = 0
+  y = 0
+  z = 0
 
-  plant.split(",").each do |step|
+  plant.split(",").map(&:chars).each do |step|
     dir = step[0]
-    num = step[1..].to_i
+    num = step.drop(1).join.to_i
 
-    ox, oy, oz = x, y, z
+    ox = x
+    oy = y
+    oz = z
 
     case dir
     when "U"
@@ -118,14 +125,19 @@ input.each do |plant|
       (x..ox).each { |nx| segments.add([nx, y, z]) }
     end
   end
-  
+
   leaves.add([x, y, z])
 end
 
-
 minz = leaves.map(&:last).min
 maxz = leaves.map(&:last).max
-puts [minz, maxz].inspect
+
+OFFSETS = [
+  [1, 0, 0], [-1, 0, 0],
+  [0, 1, 0], [0, -1, 0],
+  [0, 0, 1], [0, 0, -1]
+].freeze
+
 min_dist = (minz..maxz).map do |tap_z|
   leaves_found = {}
 
@@ -136,6 +148,7 @@ min_dist = (minz..maxz).map do |tap_z|
   until queue.empty?
     coord, dist = queue.shift
     next if visited.include?(coord)
+
     visited.add(coord)
 
     if leaves.include?(coord) && !leaves_found.key?(coord)
@@ -143,11 +156,7 @@ min_dist = (minz..maxz).map do |tap_z|
       break if leaves_found.length == leaves.length
     end
 
-    [
-      [1, 0, 0], [-1, 0, 0],
-      [0, 1, 0], [0, -1, 0],
-      [0, 0, 1], [0, 0, -1]
-    ].map do |ds| 
+    OFFSETS.map do |ds|
       coord.zip(ds).map(&:sum)
     end.select do |new_coord|
       segments.include?(new_coord) && !visited.include?(new_coord)
@@ -159,4 +168,4 @@ min_dist = (minz..maxz).map do |tap_z|
   leaves_found.values.sum
 end
 
-puts min_dist.min
+puts "Part 3:", min_dist.min
